@@ -5,6 +5,7 @@ import br.cesjf.lppo.Contato;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,13 +16,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ContatoDAO {
+        private PreparedStatement opListar;
+        private PreparedStatement opNovo;
+        
+        public ContatoDAO() throws Exception{
+            Connection conexao = ConnectionFactory.createConnection();
+                opListar = conexao.prepareStatement("SELECT * FROM contato");
+                
+        }
+    
     public List<Contato> listAll() throws Exception{
         try {
             List<Contato> contatos = new ArrayList<>();
             
-            Connection conexao = ConnectionFactory.createConnection();
-            Statement operacao = conexao.createStatement();
-            ResultSet resultado = operacao.executeQuery(" SELECT * FROM contato");
+            
+           
+            ResultSet resultado = opListar.executeQuery(" SELECT * FROM contato");
                 while(resultado.next()){
                     Contato novoContato = new Contato();
                     novoContato.setId(resultado.getLong("id"));
@@ -34,8 +44,6 @@ public class ContatoDAO {
             
             
             return contatos;
-        } catch (ClassNotFoundException ex) {
-            throw new Exception("Driver não encontrado!" , ex);
         } catch (SQLException ex){
             throw new Exception("Erro ao listar contatos no banco", ex);
         }
