@@ -32,8 +32,9 @@ public class ListaContatoServlet extends HttpServlet {
             throws ServletException, IOException {
         
         List<Contato> contatos;
-        ContatoDAO dao = new ContatoDAO();
+        
         try {
+            ContatoDAO dao = new ContatoDAO();
             contatos = dao.listAll();
         } catch (Exception ex) {
             Logger.getLogger(ListaContatoServlet.class.getName()).log(Level.SEVERE, null, ex);
